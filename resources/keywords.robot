@@ -33,6 +33,35 @@ ${KINESIS_LOG_UPLOAD_RESPONSE}    # Store the response from the kinesis_file_upl
 
 *** Keywords ***
 
+Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName
+    [Arguments]    ${alias}    ${api_name}    ${env}   ${response}    ${status_code}
+
+    Send a Post request on the session                       mysession                        kinesis_shard_key     ${ENV}
+    Set Suite Variable                                       ${KINESIS_SHARD_KEY_RESPONSE}    ${RESPONSE}
+    Verify the response code                                 ${KINESIS_SHARD_KEY_RESPONSE}    ${status_code}
+    Verify PartitionKey from JSON response and extract it    ${KINESIS_SHARD_KEY_RESPONSE}
+    Verify StreamName from JSON response and extract it      ${KINESIS_SHARD_KEY_RESPONSE}
+
+Send a Post request to the Signed Kinesis Post API to get the signed headers
+    [Arguments]    ${alias}    ${api_name}    ${env}    ${payload_hash}    ${status_code}
+
+    Create base64 encoded data for the log upload payload
+    Create log upload payload using the required parameters  ${PARTITION_KEY}                             ${STREAM_NAME}        ${DATA}
+    Generate SHA-256 Hash from the payload                   ${LOG_UPLOAD_PAYLOAD}
+    Set Suite Variable                                       ${LOG_UPLOAD_PAYLOAD_HASH}                   ${PAYLOAD_HASH}
+    Send a Post request on the session                       mysession                                    signed_kinesis_post   ${ENV}    ${PAYLOAD_HASH}
+    Set Suite Variable                                       ${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}   ${RESPONSE.text}
+    Verify the response code                                 ${RESPONSE}                                  ${status_code}
+
+Send a Post request to the Kinesis Log Upload API to verify the log upload
+    [Arguments]    ${host}    ${headers}    ${payload}    ${status_code}
+
+    Extract signed headers                 ${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}
+    Send a Post request                    ${KINESIS_HOST}                              ${LOG_UPLOAD_SIGNED_HEADERS}    ${LOG_UPLOAD_PAYLOAD}
+    Set Suite Variable                     ${KINESIS_LOG_UPLOAD_RESPONSE}               ${RESPONSE}
+    Verify the response code               ${KINESIS_LOG_UPLOAD_RESPONSE}               ${status_code}
+    Verify log upload to kinesis response  ${KINESIS_LOG_UPLOAD_RESPONSE}
+
 Create API session
     [Arguments]    ${alias}    ${api_name}    ${env}
     ${env_data}=      Get environment configuration    ${env}
