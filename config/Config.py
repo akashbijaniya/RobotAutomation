@@ -12,8 +12,8 @@ environments = {
 api_headers = {
     "kinesis_shard_key": {
         "qac1": {
-            "X-Bitglass-Machine-GUID": "3CCF0BA8-057E-4FEC-8987-C46E1489DC3B",
-            "cid": "0_nZnYKcWRQ6EERS-Y9grTrSVLgScvN8A7zg==",
+            "X-Bitglass-Machine-GUID": "08D5720C-7FBE-40F4-AE6C-2644A5F6A03B",
+            "cid": "0_Ce7G3tM6v0P2DOJVNqqg6pbk7AC_1mmg8A==",
             "Content-Type": "application/json"
         },
         "dev4": {
@@ -31,6 +31,18 @@ api_headers = {
         "dev4": {
             "X-Bitglass-Machine-GUID": "8384ACD4-E326-4D6B-9650-36454B1F2ED6",
             "cid": "0_TxbPtvZGUnzAkFHv27-_oVAs4Z9aI7nPVQ==",
+            "Content-Type": "application/json"
+        }
+    },
+    "kinesis_file_upload": {
+        "qac1": {
+            "X-Bitglass-Machine-GUID": "08D5720C-7FBE-40F4-AE6C-2644A5F6A03B",
+            "cid": "0_Ce7G3tM6v0P2DOJVNqqg6pbk7AC_1mmg8A==",
+            "Content-Type": "application/json"
+        },
+        "dev4": {
+            "X-Bitglass-Machine-GUID": "08D5720C-7FBE-40F4-AE6C-2644A5F6A03B",
+            "cid": "0_Ce7G3tM6v0P2DOJVNqqg6pbk7AC_1mmg8A==",
             "Content-Type": "application/json"
         }
     }
@@ -43,14 +55,6 @@ api_payloads = {
         },
         "dev4": {
             "company_id": 315420
-        }
-    },
-    "signed_kinesis_post": {
-        "qac1": {
-            "payload_hash":"9031354fd509a372af3bcb8a0aa211ccd546317be5ff84a5cb82ae2f043161c8"
-        },
-        "dev4": {
-            "payload_hash":"9031354fd509a372af3bcb8a0aa211ccd546317be5ff84a5cb82ae2f043161c8"
         }
     }
 }
