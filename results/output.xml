@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.1 (Python 3.12.5 on darwin)" generated="2024-12-02T13:28:52.814681" rpa="false" schemaversion="5">
+<suite id="s1" name="bgAPITest" source="/Users/akash.bijaniya/Documents/Automation/MyGitSpace/Robot Automation/RobotAutomation/tests/bgAPITest.robot">
+<test id="s1-t1" name="Verify that a POST API call to &quot;/api/kinesis_shard_key/&quot; endpoint returns a valid PartitionKey and StreamName" line="12">
+<kw name="Create API session" owner="keywords">
+<kw name="Get environment configuration" owner="keywords">
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:52.938310" level="INFO">${env_data} = {'url': 'https://portal.dev4.fp1.dev', 'environmentSuffix': 'dev4'}</msg>
+<var>${env_data}</var>
+<arg>${environments}</arg>
+<arg>${env}</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.938234" elapsed="0.000094"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${env_data} is None</arg>
+<arg>Fail</arg>
+<arg>Invalid environment: ${env}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.938392" elapsed="0.000072"/>
+</kw>
+<return>
+<value>${env_data}</value>
+<status status="PASS" start="2024-12-02T13:28:52.938487" elapsed="0.000023"/>
+</return>
+<msg time="2024-12-02T13:28:52.938553" level="INFO">${env_data} = {'url': 'https://portal.dev4.fp1.dev', 'environmentSuffix': 'dev4'}</msg>
+<var>${env_data}</var>
+<arg>${env}</arg>
+<status status="PASS" start="2024-12-02T13:28:52.937969" elapsed="0.000592"/>
+</kw>
+<kw name="Get API headers" owner="keywords">
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:52.938761" level="INFO">${headers_data} = {'qac1': {'X-Bitglass-Machine-GUID': '08D5720C-7FBE-40F4-AE6C-2644A5F6A03B', 'cid': '0_Ce7G3tM6v0P2DOJVNqqg6pbk7AC_1mmg8A==', 'Content-Type': 'application/json'}, 'dev4': {'X-Bitglass-Machine-GUID': '...</msg>
+<var>${headers_data}</var>
+<arg>${api_headers}</arg>
+<arg>${api_name}</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.938705" elapsed="0.000065"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${headers_data} is None</arg>
+<arg>Fail</arg>
+<arg>Invalid API name: ${api_name}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.938808" elapsed="0.000066"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:52.938957" level="INFO">${headers} = {'X-Bitglass-Machine-GUID': '8384ACD4-E326-4D6B-9650-36454B1F2ED6', 'cid': '0_TxbPtvZGUnzAkFHv27-_oVAs4Z9aI7nPVQ==', 'Content-Type': 'application/json'}</msg>
+<var>${headers}</var>
+<arg>${headers_data}</arg>
+<arg>${env}</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.938907" elapsed="0.000058"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${headers} is None</arg>
+<arg>Fail</arg>
+<arg>No headers defined for API: ${api_name} in environment: ${env}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.939000" elapsed="0.000045"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2024-12-02T13:28:52.939061" elapsed="0.000011"/>
+</return>
+<msg time="2024-12-02T13:28:52.939108" level="INFO">${headers} = {'X-Bitglass-Machine-GUID': '8384ACD4-E326-4D6B-9650-36454B1F2ED6', 'cid': '0_TxbPtvZGUnzAkFHv27-_oVAs4Z9aI7nPVQ==', 'Content-Type': 'application/json'}</msg>
+<var>${headers}</var>
+<arg>${api_name}</arg>
+<arg>${env}</arg>
+<status status="PASS" start="2024-12-02T13:28:52.938611" elapsed="0.000504"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:52.939188" level="INFO">${url} = https://portal.dev4.fp1.dev</msg>
+<var>${url}</var>
+<arg>${env_data}</arg>
+<arg>url</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.939146" elapsed="0.000048"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2024-12-02T13:28:52.939313" level="INFO">Creating Session using : alias=mysession, url=https://portal.dev4.fp1.dev, headers={'X-Bitglass-Machine-GUID': '8384ACD4-E326-4D6B-9650-36454B1F2ED6', 'cid': '0_TxbPtvZGUnzAkFHv27-_oVAs4Z9aI7nPVQ==', 'Content-Type': 'application/json'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<arg>${alias}</arg>
+<arg>${url}</arg>
+<arg>headers=${headers}</arg>
+<arg>verify=True</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2024-12-02T13:28:52.939225" elapsed="0.000152"/>
+</kw>
+<arg>mysession</arg>
+<arg>kinesis_shard_key</arg>
+<arg>${ENV}</arg>
+<status status="PASS" start="2024-12-02T13:28:52.937815" elapsed="0.001583"/>
+</kw>
+<kw name="Send a Post request on the session" owner="keywords">
+<kw name="Get environment configuration" owner="keywords">
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:52.939829" level="INFO">${env_data} = {'url': 'https://portal.dev4.fp1.dev', 'environmentSuffix': 'dev4'}</msg>
+<var>${env_data}</var>
+<arg>${environments}</arg>
+<arg>${env}</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.939769" elapsed="0.000067"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${env_data} is None</arg>
+<arg>Fail</arg>
+<arg>Invalid environment: ${env}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.939876" elapsed="0.000051"/>
+</kw>
+<return>
+<value>${env_data}</value>
+<status status="PASS" start="2024-12-02T13:28:52.939943" elapsed="0.000010"/>
+</return>
+<msg time="2024-12-02T13:28:52.939986" level="INFO">${env_data} = {'url': 'https://portal.dev4.fp1.dev', 'environmentSuffix': 'dev4'}</msg>
+<var>${env_data}</var>
+<arg>${env}</arg>
+<status status="PASS" start="2024-12-02T13:28:52.939583" elapsed="0.000409"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Get API payload" owner="keywords">
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:52.940343" level="INFO">${payload_data} = {'qac1': {'company_id': 314663}, 'dev4': {'company_id': 315420}}</msg>
+<var>${payload_data}</var>
+<arg>${api_payloads}</arg>
+<arg>${api_name}</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.940279" elapsed="0.000078"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${payload_data} is None</arg>
+<arg>Fail</arg>
+<arg>Invalid API name: ${api_name}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.940402" elapsed="0.000061"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:52.940559" level="INFO">${payload} = {'company_id': 315420}</msg>
+<var>${payload}</var>
+<arg>${payload_data}</arg>
+<arg>${env}</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.940501" elapsed="0.000066"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${payload} is None</arg>
+<arg>Fail</arg>
+<arg>No payload defined for API: ${api_name} in environment: ${env}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.940606" elapsed="0.000045"/>
+</kw>
+<return>
+<value>${payload}</value>
+<status status="PASS" start="2024-12-02T13:28:52.940668" elapsed="0.000011"/>
+</return>
+<arg>${api_name}</arg>
+<arg>${env}</arg>
+<status status="PASS" start="2024-12-02T13:28:52.940171" elapsed="0.000536"/>
+</kw>
+<msg time="2024-12-02T13:28:52.940767" level="INFO">${final_payload} = {'company_id': 315420}</msg>
+<var>${final_payload}</var>
+<arg>${payload} is not None</arg>
+<arg>Set Variable</arg>
+<arg>${payload}</arg>
+<arg>ELSE</arg>
+<arg>Get API Payload</arg>
+<arg>${api_name}</arg>
+<arg>${env}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.940051" elapsed="0.000723"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2024-12-02T13:28:53.879081" level="INFO">POST Request : url=https://portal.dev4.fp1.dev/api/kinesis_shard_key 
+ path_url=/api/kinesis_shard_key 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'X-Bitglass-Machine-GUID': '8384ACD4-E326-4D6B-9650-36454B1F2ED6', 'cid': '0_TxbPtvZGUnzAkFHv27-_oVAs4Z9aI7nPVQ==', 'Content-Type': 'application/json', 'Content-Length': '22'} 
+ body=b'{"company_id": 315420}' 
+ </msg>
+<msg time="2024-12-02T13:28:53.879405" level="INFO">POST Response : url=https://portal.dev4.fp1.dev/api/kinesis_shard_key 
+ status=200, reason=OK 
+ headers={'content-type': 'application/json', 'content-length': '99', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload'} 
+ body={"PartitionKey":"lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9","StreamName":"sase-raw-logs-dev4","status":200}
+ 
+ </msg>
+<msg time="2024-12-02T13:28:53.879785" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${alias}</arg>
+<arg>/api/${api_name}</arg>
+<arg>json=${final_payload}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2024-12-02T13:28:52.940813" elapsed="0.939040"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.881200" level="INFO">${RESPONSE} = &lt;Response [200]&gt;</msg>
+<arg>${RESPONSE}</arg>
+<arg>${response}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.880504" elapsed="0.000792"/>
+</kw>
+<arg>mysession</arg>
+<arg>kinesis_shard_key</arg>
+<arg>${ENV}</arg>
+<status status="PASS" start="2024-12-02T13:28:52.939471" elapsed="0.941995"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.882332" level="INFO">${KINESIS_SHARD_KEY_RESPONSE} = &lt;Response [200]&gt;</msg>
+<arg>${KINESIS_SHARD_KEY_RESPONSE}</arg>
+<arg>${RESPONSE}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.881912" elapsed="0.000505"/>
+</kw>
+<kw name="Verify the response code" owner="keywords">
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.884357" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>${expected_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.883384" elapsed="0.001072"/>
+</kw>
+<arg>${KINESIS_SHARD_KEY_RESPONSE}</arg>
+<arg>200</arg>
+<status status="PASS" start="2024-12-02T13:28:53.882844" elapsed="0.001686"/>
+</kw>
+<kw name="Verify PartitionKey from JSON response and extract it" owner="keywords">
+<kw name="Convert String To Json" owner="JSONLibrary">
+<msg time="2024-12-02T13:28:53.885798" level="INFO">${response_json} = {'PartitionKey': 'lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9', 'StreamName': 'sase-raw-logs-dev4', 'status': 200}</msg>
+<var>${response_json}</var>
+<arg>${response.text}</arg>
+<doc>Convert String to JSON object</doc>
+<status status="PASS" start="2024-12-02T13:28:53.885078" elapsed="0.000749"/>
+</kw>
+<kw name="Convert To Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:53.886122" level="INFO">${response_dictionary} = {'PartitionKey': 'lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9', 'StreamName': 'sase-raw-logs-dev4', 'status': 200}</msg>
+<var>${response_dictionary}</var>
+<arg>${response_json}</arg>
+<doc>Converts the given ``item`` to a Python ``dict`` type.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.885958" elapsed="0.000191"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:53.886457" level="INFO">${partitionKey} = lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9</msg>
+<var>${partitionKey}</var>
+<arg>${response_dictionary}</arg>
+<arg>PartitionKey</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.886272" elapsed="0.000210"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.886809" level="INFO">Length is 32.</msg>
+<arg>${partitionKey}</arg>
+<arg>PartitionKey is missing or empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.886606" elapsed="0.000250"/>
+</kw>
+<kw name="Should Match Regexp" owner="BuiltIn">
+<arg>${partitionKey}</arg>
+<arg>^[A-Za-z0-9]{32}$</arg>
+<arg>PartitionKey is not alphanumeric or does not have a length of 32</arg>
+<doc>Fails if ``string`` does not match ``pattern`` as a regular expression.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.887247" elapsed="0.000570"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.888407" level="INFO">${PARTITION_KEY} = lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9</msg>
+<arg>${PARTITION_KEY}</arg>
+<arg>${partitionkey}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.888127" elapsed="0.000331"/>
+</kw>
+<arg>${KINESIS_SHARD_KEY_RESPONSE}</arg>
+<status status="PASS" start="2024-12-02T13:28:53.884762" elapsed="0.003776"/>
+</kw>
+<kw name="Verify StreamName from JSON response and extract it" owner="keywords">
+<kw name="Convert String To Json" owner="JSONLibrary">
+<msg time="2024-12-02T13:28:53.890267" level="INFO">${response_json} = {'PartitionKey': 'lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9', 'StreamName': 'sase-raw-logs-dev4', 'status': 200}</msg>
+<var>${response_json}</var>
+<arg>${response.text}</arg>
+<doc>Convert String to JSON object</doc>
+<status status="PASS" start="2024-12-02T13:28:53.889509" elapsed="0.000789"/>
+</kw>
+<kw name="Convert To Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:53.890569" level="INFO">${response_dictionary} = {'PartitionKey': 'lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9', 'StreamName': 'sase-raw-logs-dev4', 'status': 200}</msg>
+<var>${response_dictionary}</var>
+<arg>${response_json}</arg>
+<doc>Converts the given ``item`` to a Python ``dict`` type.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.890418" elapsed="0.000176"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:53.890840" level="INFO">${streamName} = sase-raw-logs-dev4</msg>
+<var>${streamName}</var>
+<arg>${response_dictionary}</arg>
+<arg>StreamName</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.890690" elapsed="0.000169"/>
+</kw>
+<kw name="Should Be String" owner="String">
+<arg>${streamName}</arg>
+<arg>StreamName is not a string</arg>
+<doc>Fails if the given ``item`` is not a string.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.890954" elapsed="0.000138"/>
+</kw>
+<kw name="Should Start With" owner="BuiltIn">
+<arg>${streamName}</arg>
+<arg>sase-raw-logs-</arg>
+<arg>StreamName does not start with 'sase-raw-logs-'</arg>
+<doc>Fails if the string ``str1`` does not start with the string ``str2``.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.891196" elapsed="0.000146"/>
+</kw>
+<kw name="Get environment configuration" owner="keywords">
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:53.891880" level="INFO">${env_data} = {'url': 'https://portal.dev4.fp1.dev', 'environmentSuffix': 'dev4'}</msg>
+<var>${env_data}</var>
+<arg>${environments}</arg>
+<arg>${env}</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.891717" elapsed="0.000184"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${env_data} is None</arg>
+<arg>Fail</arg>
+<arg>Invalid environment: ${env}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.892178" elapsed="0.000198"/>
+</kw>
+<return>
+<value>${env_data}</value>
+<status status="PASS" start="2024-12-02T13:28:53.892428" elapsed="0.000047"/>
+</return>
+<msg time="2024-12-02T13:28:53.892586" level="INFO">${env_data} = {'url': 'https://portal.dev4.fp1.dev', 'environmentSuffix': 'dev4'}</msg>
+<var>${env_data}</var>
+<arg>${env}</arg>
+<status status="PASS" start="2024-12-02T13:28:53.891486" elapsed="0.001119"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:53.892827" level="INFO">${environmentSuffix} = dev4</msg>
+<var>${environmentSuffix}</var>
+<arg>${env_data}</arg>
+<arg>environmentSuffix</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.892693" elapsed="0.000154"/>
+</kw>
+<kw name="Should End With" owner="BuiltIn">
+<arg>${streamName}</arg>
+<arg>${environmentSuffix}</arg>
+<arg>StreamName does not end with environment suffix ${environmentSuffix}</arg>
+<doc>Fails if the string ``str1`` does not end with the string ``str2``.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.892937" elapsed="0.000143"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.893312" level="INFO">${STREAM_NAME} = sase-raw-logs-dev4</msg>
+<arg>${STREAM_NAME}</arg>
+<arg>${streamName}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.893167" elapsed="0.000171"/>
+</kw>
+<arg>${KINESIS_SHARD_KEY_RESPONSE}</arg>
+<status status="PASS" start="2024-12-02T13:28:53.889092" elapsed="0.004288"/>
+</kw>
+<doc>Verifies that the kinesis_shard_key API returns a valid PartitionKey and StreamName</doc>
+<tag>API</tag>
+<tag>Regression</tag>
+<tag>Sanity</tag>
+<status status="PASS" start="2024-12-02T13:28:52.937477" elapsed="0.956051"/>
+</test>
+<test id="s1-t2" name="Verify that a POST API call to &quot;/api/signed_kinesis_post/&quot; endpoint returns valid authorization headers" line="26">
+<kw name="Create base64 encoded data for the log upload payload" owner="keywords">
+<kw name="Generate Random String" owner="String">
+<msg time="2024-12-02T13:28:53.894500" level="INFO">${random_number} = 2337190229840000</msg>
+<var>${random_number}</var>
+<arg>16</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.894301" elapsed="0.000217"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.894926" level="INFO">${plain_text} = This is test number: 2337190229840000</msg>
+<var>${plain_text}</var>
+<arg>This is test number: ${random_number}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.894600" elapsed="0.000343"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.895241" level="INFO">${encoded_text} = VGhpcyBpcyB0ZXN0IG51bWJlcjogMjMzNzE5MDIyOTg0MDAwMA==</msg>
+<var>${encoded_text}</var>
+<arg>base64.b64encode("${plain_text}".encode("utf-8")).decode("utf-8")</arg>
+<arg>modules=base64</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.895030" elapsed="0.000228"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.895476" level="INFO">${DATA} = VGhpcyBpcyB0ZXN0IG51bWJlcjogMjMzNzE5MDIyOTg0MDAwMA==</msg>
+<arg>${DATA}</arg>
+<arg>${encoded_text}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.895347" elapsed="0.000155"/>
+</kw>
+<status status="PASS" start="2024-12-02T13:28:53.894138" elapsed="0.001404"/>
+</kw>
+<kw name="Create log upload payload using the required parameters" owner="keywords">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.896115" level="INFO">${payload} = {'Records': [{'Data': 'VGhpcyBpcyB0ZXN0IG51bWJlcjogMjMzNzE5MDIyOTg0MDAwMA==', 'PartitionKey': 'lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9'}], 'StreamName': 'sase-raw-logs-dev4'}</msg>
+<var>${payload}</var>
+<arg>{"Records": [{"Data": "${Data}", "PartitionKey": "${PartitionKey}"}], "StreamName": "${StreamName}"}</arg>
+<arg>modules=json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.895888" elapsed="0.000244"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.896357" level="INFO">${LOG_UPLOAD_PAYLOAD} = {'Records': [{'Data': 'VGhpcyBpcyB0ZXN0IG51bWJlcjogMjMzNzE5MDIyOTg0MDAwMA==', 'PartitionKey': 'lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9'}], 'StreamName': 'sase-raw-logs-dev4'}</msg>
+<arg>${LOG_UPLOAD_PAYLOAD}</arg>
+<arg>${payload}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.896219" elapsed="0.000164"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.896543" level="INFO">{'Records': [{'Data': 'VGhpcyBpcyB0ZXN0IG51bWJlcjogMjMzNzE5MDIyOTg0MDAwMA==', 'PartitionKey': 'lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9'}], 'StreamName': 'sase-raw-logs-dev4'}</msg>
+<arg>${LOG_UPLOAD_PAYLOAD}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.896463" elapsed="0.000108"/>
+</kw>
+<arg>${PARTITION_KEY}</arg>
+<arg>${STREAM_NAME}</arg>
+<arg>${DATA}</arg>
+<status status="PASS" start="2024-12-02T13:28:53.895657" elapsed="0.000953"/>
+</kw>
+<kw name="Generate SHA-256 Hash from the payload" owner="keywords">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.897359" level="INFO">${sha256_hash} = {"Records": [{"Data": "VGhpcyBpcyB0ZXN0IG51bWJlcjogMjMzNzE5MDIyOTg0MDAwMA==", "PartitionKey": "lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9"}], "StreamName": "sase-raw-logs-dev4"}</msg>
+<var>${sha256_hash}</var>
+<arg>json.dumps(${payload})</arg>
+<arg>modules=json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.896934" elapsed="0.000467"/>
+</kw>
+<kw name="Convert Json To String" owner="JSONLibrary">
+<msg time="2024-12-02T13:28:53.897756" level="INFO">${sha256_hash} = "{\"Records\": [{\"Data\": \"VGhpcyBpcyB0ZXN0IG51bWJlcjogMjMzNzE5MDIyOTg0MDAwMA==\", \"PartitionKey\": \"lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9\"}], \"StreamName\": \"sase-raw-logs-dev4\"}"</msg>
+<var>${sha256_hash}</var>
+<arg>${sha256_hash}</arg>
+<doc>Convert JSON object to string</doc>
+<status status="PASS" start="2024-12-02T13:28:53.897567" elapsed="0.000208"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.897988" level="INFO">Converted Hash: "{\"Records\": [{\"Data\": \"VGhpcyBpcyB0ZXN0IG51bWJlcjogMjMzNzE5MDIyOTg0MDAwMA==\", \"PartitionKey\": \"lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9\"}], \"StreamName\": \"sase-raw-logs-dev4\"}"</msg>
+<arg>Converted Hash: ${sha256_hash}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.897874" elapsed="0.000146"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.898368" level="INFO">${sha256_hash} = cf0dac61dbfa3fa3deedc5d64347e1d339cb95a8c42dcc9a43233e1d945f578d</msg>
+<var>${sha256_hash}</var>
+<arg>hashlib.sha256(${sha256_hash}.encode('utf-8')).hexdigest()</arg>
+<arg>modules=hashlib</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.898102" elapsed="0.000284"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.898580" level="INFO">${sha256_hash} = {"payload_hash": "cf0dac61dbfa3fa3deedc5d64347e1d339cb95a8c42dcc9a43233e1d945f578d"}</msg>
+<var>${sha256_hash}</var>
+<arg>{"payload_hash": "${sha256_hash}"}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.898476" elapsed="0.000148"/>
+</kw>
+<kw name="Convert String To Json" owner="JSONLibrary">
+<msg time="2024-12-02T13:28:53.899119" level="INFO">${sha256_hash} = {'payload_hash': 'cf0dac61dbfa3fa3deedc5d64347e1d339cb95a8c42dcc9a43233e1d945f578d'}</msg>
+<var>${sha256_hash}</var>
+<arg>${sha256_hash}</arg>
+<doc>Convert String to JSON object</doc>
+<status status="PASS" start="2024-12-02T13:28:53.898899" elapsed="0.000239"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.899514" level="INFO">${PAYLOAD_HASH} = {'payload_hash': 'cf0dac61dbfa3fa3deedc5d64347e1d339cb95a8c42dcc9a43233e1d945f578d'}</msg>
+<arg>${PAYLOAD_HASH}</arg>
+<arg>${sha256_hash}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.899280" elapsed="0.000279"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.899743" level="INFO">{'payload_hash': 'cf0dac61dbfa3fa3deedc5d64347e1d339cb95a8c42dcc9a43233e1d945f578d'}</msg>
+<arg>${PAYLOAD_HASH}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.899661" elapsed="0.000106"/>
+</kw>
+<arg>${LOG_UPLOAD_PAYLOAD}</arg>
+<status status="PASS" start="2024-12-02T13:28:53.896750" elapsed="0.003049"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:53.900004" level="INFO">${LOG_UPLOAD_PAYLOAD_HASH} = {'payload_hash': 'cf0dac61dbfa3fa3deedc5d64347e1d339cb95a8c42dcc9a43233e1d945f578d'}</msg>
+<arg>${LOG_UPLOAD_PAYLOAD_HASH}</arg>
+<arg>${PAYLOAD_HASH}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.899891" elapsed="0.000134"/>
+</kw>
+<kw name="Send a Post request on the session" owner="keywords">
+<kw name="Get environment configuration" owner="keywords">
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:53.900586" level="INFO">${env_data} = {'url': 'https://portal.dev4.fp1.dev', 'environmentSuffix': 'dev4'}</msg>
+<var>${env_data}</var>
+<arg>${environments}</arg>
+<arg>${env}</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.900485" elapsed="0.000114"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${env_data} is None</arg>
+<arg>Fail</arg>
+<arg>Invalid environment: ${env}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.900671" elapsed="0.000095"/>
+</kw>
+<return>
+<value>${env_data}</value>
+<status status="PASS" start="2024-12-02T13:28:53.900797" elapsed="0.000020"/>
+</return>
+<msg time="2024-12-02T13:28:53.900884" level="INFO">${env_data} = {'url': 'https://portal.dev4.fp1.dev', 'environmentSuffix': 'dev4'}</msg>
+<var>${env_data}</var>
+<arg>${env}</arg>
+<status status="PASS" start="2024-12-02T13:28:53.900342" elapsed="0.000555"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Set Variable" owner="BuiltIn">
+<arg>${payload}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.901113" elapsed="0.000066"/>
+</kw>
+<msg time="2024-12-02T13:28:53.901224" level="INFO">${final_payload} = {'payload_hash': 'cf0dac61dbfa3fa3deedc5d64347e1d339cb95a8c42dcc9a43233e1d945f578d'}</msg>
+<var>${final_payload}</var>
+<arg>${payload} is not None</arg>
+<arg>Set Variable</arg>
+<arg>${payload}</arg>
+<arg>ELSE</arg>
+<arg>Get API Payload</arg>
+<arg>${api_name}</arg>
+<arg>${env}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.900962" elapsed="0.000274"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2024-12-02T13:28:54.189248" level="INFO">POST Request : url=https://portal.dev4.fp1.dev/api/signed_kinesis_post 
+ path_url=/api/signed_kinesis_post 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'X-Bitglass-Machine-GUID': '8384ACD4-E326-4D6B-9650-36454B1F2ED6', 'cid': '0_TxbPtvZGUnzAkFHv27-_oVAs4Z9aI7nPVQ==', 'Content-Type': 'application/json', 'Content-Length': '84'} 
+ body=b'{"payload_hash": "cf0dac61dbfa3fa3deedc5d64347e1d339cb95a8c42dcc9a43233e1d945f578d"}' 
+ </msg>
+<msg time="2024-12-02T13:28:54.189481" level="INFO">POST Response : url=https://portal.dev4.fp1.dev/api/signed_kinesis_post 
+ status=200, reason=OK 
+ headers={'content-type': 'application/json', 'content-length': '1791', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload'} 
+ body={"headers":{"Authorization":"AWS4-HMAC-SHA256 Credential=ASIAS7I6MFNJD6DEEVNE/20241202/us-west-2/kinesis/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-target, Signature=f3d0066256c455a71050b90500ef90a1cd216549b0dbc758469339ca0e5bbcd8","Content-Type":"application/x-amz-json-1.1","X-Amz-Date":"20241202T075854Z","X-Amz-Security-Token":"IQoJb3JpZ2luX2VjEAwaCXVzLXdlc3QtMiJHMEUCIQCLFPKIZgL+3xW405pHdW6ouhi/Jg6LU0KK0sr65oKiHgIgGPdjF7IMqh9FTlM2gOjn+ZzbCoCUUTg6xwoYMVdsK8QqwwUItf//////////ARADGgwyMDQ2MTE1Mjk1NTQiDKUjeGR61cBXT45PJCqXBdhQmOY2gBI0YdKQEe/S2IZHsPh/MQCkh+f4seSV+hgCZaKm0uRjat8pKnVKw45xCAFFEZFFSAYoK5j0mXnXxgkAK4VP20Z6/IOgL9+D1X8WcNYxVTVhTIaWRcqEsnGe+Pnt4t4RVOTNtcs/1sh+2Du8M1SZejtq7W1mtr+83xr1D7iKmHW38GAWkffOisk5NUS7PY06rOAWQF4NTEGilOI1KEND1VTnw5eYtPB5NZe4a2X9TGrEd5TnGIsBIfOu4F+M0lyqscC2Jl8wzJQFAGT6zmztdVvwNzv4O5fnUvn/JQvXdMS7ULmIbwsVpQodyEfiutI91QbIpc14dcqXLAuEtyk1mJlBFOF4YDQh0jUocFt8o06npPy0f3xHShCY7LlkBGOQs5cS8IKXZF6xxCFDVWRZGNr8owPh0G2ngqbOaodMI2gimo8iMSAKZJRycXQOC55UZtnajsjLUsgfhfxZW0pC73XbrgrJ+FICinBZBLbIx/aqIOexD5AFxAKmgyL4u1gnzlkGjbA8MYI5MS2u3E+bdoH++Sa1WxpAuQk7txOfQ0LEnb8MiZvUDY6QsRrVVuQXR8sv5m3pkgMVdkIAj7ZfbVtTNSCickdylTU0jddIhFqik7RKPxZHXB5LMNd7TJ89Eel15yKQpQMwvs6/8lRRPxgSWRVcJ4pEgzmU8WVZrgsbRBeCYoV2M4MxGzcJye9KS5rAJqTO3b/g1FA0++qydHQB5uFL/AXveXlhtq75bfwSNcUCUZPnWOLExdYFn9YN2NZgLCaIIdQAXMmrWPm/gUupDJUJskyekhqIIGoMai9rAGranAZP9+cj8Wt41tVIQ2aajJl8oiBkyiijc9QJQ5tmuLtvhN+4/CeLKnCwJgsyUDCE17S6BjqxAWqzF+g5/CAVEaGoqt+0t4D0guBqYKMgR5y317aRzHU/aP9r5VmwmQ79TImMLd/EUBEckgRV/fuHHfIsd3FgM4n0fGNM0VxdSkmrCQ1lF2LN56BNhz4tfpPcX1cDSWRUzNqoBNTGYCI+kHnGC5VPUi7Z+Okv6xIVSf0gDuYd9zKYJnLq4tscYpHFepYW3Ncc7P4mWm/lMKGCQQYgBTfqlJgLE03Zn6HXUOMp8pGrnn8gCQ==","X-Amz-Target":"Kinesis_20131202.PutRecords"},"host":"https://kinesis.us-west-2.amazonaws.com","status":200}
+ 
+ </msg>
+<msg time="2024-12-02T13:28:54.189845" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${alias}</arg>
+<arg>/api/${api_name}</arg>
+<arg>json=${final_payload}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2024-12-02T13:28:53.901309" elapsed="0.288597"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:54.191002" level="INFO">${RESPONSE} = &lt;Response [200]&gt;</msg>
+<arg>${RESPONSE}</arg>
+<arg>${response}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:54.190422" elapsed="0.000666"/>
+</kw>
+<arg>mysession</arg>
+<arg>signed_kinesis_post</arg>
+<arg>${ENV}</arg>
+<arg>${PAYLOAD_HASH}</arg>
+<status status="PASS" start="2024-12-02T13:28:53.900128" elapsed="0.291124"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:54.192590" level="INFO">${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE} = {"headers":{"Authorization":"AWS4-HMAC-SHA256 Credential=ASIAS7I6MFNJD6DEEVNE/20241202/us-west-2/kinesis/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-target, Signature=f3d0066256c455...</msg>
+<arg>${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}</arg>
+<arg>${RESPONSE.text}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:54.191669" elapsed="0.000965"/>
+</kw>
+<kw name="Verify the response code" owner="keywords">
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2024-12-02T13:28:54.194059" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>${expected_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2024-12-02T13:28:54.193253" elapsed="0.000876"/>
+</kw>
+<arg>${RESPONSE}</arg>
+<arg>200</arg>
+<status status="PASS" start="2024-12-02T13:28:54.192893" elapsed="0.001299"/>
+</kw>
+<doc>Verifies that the signed_kinesis_post API returns valid authorization headers</doc>
+<tag>API</tag>
+<tag>Regression</tag>
+<tag>Sanity</tag>
+<status status="PASS" start="2024-12-02T13:28:53.893734" elapsed="0.300831"/>
+</test>
+<test id="s1-t3" name="Verify that the log is successfully uploaded to Kinesis" line="37">
+<kw name="Extract signed headers" owner="keywords">
+<kw name="Convert String To Json" owner="JSONLibrary">
+<msg time="2024-12-02T13:28:54.196177" level="INFO">${response_json} = {'headers': {'Authorization': 'AWS4-HMAC-SHA256 Credential=ASIAS7I6MFNJD6DEEVNE/20241202/us-west-2/kinesis/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-target, Signature=f3d0066256c4...</msg>
+<var>${response_json}</var>
+<arg>${response}</arg>
+<doc>Convert String to JSON object</doc>
+<status status="PASS" start="2024-12-02T13:28:54.195965" elapsed="0.000241"/>
+</kw>
+<kw name="Convert To Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:54.196454" level="INFO">${response_dictionary} = {'headers': {'Authorization': 'AWS4-HMAC-SHA256 Credential=ASIAS7I6MFNJD6DEEVNE/20241202/us-west-2/kinesis/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-target, Signature=f3d0066256c4...</msg>
+<var>${response_dictionary}</var>
+<arg>${response_json}</arg>
+<doc>Converts the given ``item`` to a Python ``dict`` type.</doc>
+<status status="PASS" start="2024-12-02T13:28:54.196315" elapsed="0.000160"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:54.196730" level="INFO">${signed_ headers} = {'Authorization': 'AWS4-HMAC-SHA256 Credential=ASIAS7I6MFNJD6DEEVNE/20241202/us-west-2/kinesis/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-target, Signature=f3d0066256c455a71050b905...</msg>
+<var>${signed_ headers}</var>
+<arg>${response_dictionary}</arg>
+<arg>headers</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="PASS" start="2024-12-02T13:28:54.196573" elapsed="0.000182"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:54.197116" level="INFO">${LOG_UPLOAD_SIGNED_HEADERS} = {'Authorization': 'AWS4-HMAC-SHA256 Credential=ASIAS7I6MFNJD6DEEVNE/20241202/us-west-2/kinesis/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-target, Signature=f3d0066256c455a71050b905...</msg>
+<arg>${LOG_UPLOAD_SIGNED_HEADERS}</arg>
+<arg>${signed_headers}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:54.196870" elapsed="0.000363"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-02T13:28:54.197566" level="INFO">{'Authorization': 'AWS4-HMAC-SHA256 Credential=ASIAS7I6MFNJD6DEEVNE/20241202/us-west-2/kinesis/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-target, Signature=f3d0066256c455a71050b90500ef90a1cd216549b0dbc758469339ca0e5bbcd8', 'Content-Type': 'application/x-amz-json-1.1', 'X-Amz-Date': '20241202T075854Z', 'X-Amz-Security-Token': 'IQoJb3JpZ2luX2VjEAwaCXVzLXdlc3QtMiJHMEUCIQCLFPKIZgL+3xW405pHdW6ouhi/Jg6LU0KK0sr65oKiHgIgGPdjF7IMqh9FTlM2gOjn+ZzbCoCUUTg6xwoYMVdsK8QqwwUItf//////////ARADGgwyMDQ2MTE1Mjk1NTQiDKUjeGR61cBXT45PJCqXBdhQmOY2gBI0YdKQEe/S2IZHsPh/MQCkh+f4seSV+hgCZaKm0uRjat8pKnVKw45xCAFFEZFFSAYoK5j0mXnXxgkAK4VP20Z6/IOgL9+D1X8WcNYxVTVhTIaWRcqEsnGe+Pnt4t4RVOTNtcs/1sh+2Du8M1SZejtq7W1mtr+83xr1D7iKmHW38GAWkffOisk5NUS7PY06rOAWQF4NTEGilOI1KEND1VTnw5eYtPB5NZe4a2X9TGrEd5TnGIsBIfOu4F+M0lyqscC2Jl8wzJQFAGT6zmztdVvwNzv4O5fnUvn/JQvXdMS7ULmIbwsVpQodyEfiutI91QbIpc14dcqXLAuEtyk1mJlBFOF4YDQh0jUocFt8o06npPy0f3xHShCY7LlkBGOQs5cS8IKXZF6xxCFDVWRZGNr8owPh0G2ngqbOaodMI2gimo8iMSAKZJRycXQOC55UZtnajsjLUsgfhfxZW0pC73XbrgrJ+FICinBZBLbIx/aqIOexD5AFxAKmgyL4u1gnzlkGjbA8MYI5MS2u3E+bdoH++Sa1WxpAuQk7txOfQ0LEnb8MiZvUDY6QsRrVVuQXR8sv5m3pkgMVdkIAj7ZfbVtTNSCickdylTU0jddIhFqik7RKPxZHXB5LMNd7TJ89Eel15yKQpQMwvs6/8lRRPxgSWRVcJ4pEgzmU8WVZrgsbRBeCYoV2M4MxGzcJye9KS5rAJqTO3b/g1FA0++qydHQB5uFL/AXveXlhtq75bfwSNcUCUZPnWOLExdYFn9YN2NZgLCaIIdQAXMmrWPm/gUupDJUJskyekhqIIGoMai9rAGranAZP9+cj8Wt41tVIQ2aajJl8oiBkyiijc9QJQ5tmuLtvhN+4/CeLKnCwJgsyUDCE17S6BjqxAWqzF+g5/CAVEaGoqt+0t4D0guBqYKMgR5y317aRzHU/aP9r5VmwmQ79TImMLd/EUBEckgRV/fuHHfIsd3FgM4n0fGNM0VxdSkmrCQ1lF2LN56BNhz4tfpPcX1cDSWRUzNqoBNTGYCI+kHnGC5VPUi7Z+Okv6xIVSf0gDuYd9zKYJnLq4tscYpHFepYW3Ncc7P4mWm/lMKGCQQYgBTfqlJgLE03Zn6HXUOMp8pGrnn8gCQ==', 'X-Amz-Target': 'Kinesis_20131202.PutRecords'}</msg>
+<arg>${LOG_UPLOAD_SIGNED_HEADERS}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-02T13:28:54.197381" elapsed="0.000254"/>
+</kw>
+<arg>${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}</arg>
+<status status="PASS" start="2024-12-02T13:28:54.195616" elapsed="0.002080"/>
+</kw>
+<kw name="Send a Post request" owner="keywords">
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2024-12-02T13:28:55.413516" level="INFO">POST Request : url=https://kinesis.us-west-2.amazonaws.com/ 
+ path_url=/ 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'AWS4-HMAC-SHA256 Credential=ASIAS7I6MFNJD6DEEVNE/20241202/us-west-2/kinesis/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-target, Signature=f3d0066256c455a71050b90500ef90a1cd216549b0dbc758469339ca0e5bbcd8', 'Content-Type': 'application/x-amz-json-1.1', 'X-Amz-Date': '20241202T075854Z', 'X-Amz-Security-Token': 'IQoJb3JpZ2luX2VjEAwaCXVzLXdlc3QtMiJHMEUCIQCLFPKIZgL+3xW405pHdW6ouhi/Jg6LU0KK0sr65oKiHgIgGPdjF7IMqh9FTlM2gOjn+ZzbCoCUUTg6xwoYMVdsK8QqwwUItf//////////ARADGgwyMDQ2MTE1Mjk1NTQiDKUjeGR61cBXT45PJCqXBdhQmOY2gBI0YdKQEe/S2IZHsPh/MQCkh+f4seSV+hgCZaKm0uRjat8pKnVKw45xCAFFEZFFSAYoK5j0mXnXxgkAK4VP20Z6/IOgL9+D1X8WcNYxVTVhTIaWRcqEsnGe+Pnt4t4RVOTNtcs/1sh+2Du8M1SZejtq7W1mtr+83xr1D7iKmHW38GAWkffOisk5NUS7PY06rOAWQF4NTEGilOI1KEND1VTnw5eYtPB5NZe4a2X9TGrEd5TnGIsBIfOu4F+M0lyqscC2Jl8wzJQFAGT6zmztdVvwNzv4O5fnUvn/JQvXdMS7ULmIbwsVpQodyEfiutI91QbIpc14dcqXLAuEtyk1mJlBFOF4YDQh0jUocFt8o06npPy0f3xHShCY7LlkBGOQs5cS8IKXZF6xxCFDVWRZGNr8owPh0G2ngqbOaodMI2gimo8iMSAKZJRycXQOC55UZtnajsjLUsgfhfxZW0pC73XbrgrJ+FICinBZBLbIx/aqIOexD5AFxAKmgyL4u1gnzlkGjbA8MYI5MS2u3E+bdoH++Sa1WxpAuQk7txOfQ0LEnb8MiZvUDY6QsRrVVuQXR8sv5m3pkgMVdkIAj7ZfbVtTNSCickdylTU0jddIhFqik7RKPxZHXB5LMNd7TJ89Eel15yKQpQMwvs6/8lRRPxgSWRVcJ4pEgzmU8WVZrgsbRBeCYoV2M4MxGzcJye9KS5rAJqTO3b/g1FA0++qydHQB5uFL/AXveXlhtq75bfwSNcUCUZPnWOLExdYFn9YN2NZgLCaIIdQAXMmrWPm/gUupDJUJskyekhqIIGoMai9rAGranAZP9+cj8Wt41tVIQ2aajJl8oiBkyiijc9QJQ5tmuLtvhN+4/CeLKnCwJgsyUDCE17S6BjqxAWqzF+g5/CAVEaGoqt+0t4D0guBqYKMgR5y317aRzHU/aP9r5VmwmQ79TImMLd/EUBEckgRV/fuHHfIsd3FgM4n0fGNM0VxdSkmrCQ1lF2LN56BNhz4tfpPcX1cDSWRUzNqoBNTGYCI+kHnGC5VPUi7Z+Okv6xIVSf0gDuYd9zKYJnLq4tscYpHFepYW3Ncc7P4mWm/lMKGCQQYgBTfqlJgLE03Zn6HXUOMp8pGrnn8gCQ==', 'X-Amz-Target': 'Kinesis_20131202.PutRecords', 'Content-Length': '167'} 
+ body=b'{"Records": [{"Data": "VGhpcyBpcyB0ZXN0IG51bWJlcjogMjMzNzE5MDIyOTg0MDAwMA==", "PartitionKey": "lvMKC1Idd9KZyXKBEQCjhPhrEKUn3Yf9"}], "StreamName": "sase-raw-logs-dev4"}' 
+ </msg>
+<msg time="2024-12-02T13:28:55.418670" level="INFO">POST Response : url=https://kinesis.us-west-2.amazonaws.com/ 
+ status=200, reason=OK 
+ headers={'x-amzn-RequestId': 'ceb0ecaa-c482-a3d7-9177-86551ebcaae8', 'x-amz-id-2': 'Tw3UhmeOM1lyIBTAfPMtiIb2b70NPvLWKxHcget2BZGoMGFo/aVBrBPy3TPp26ze5b4vFodvm0sYBesM1+oNJVJPPLWoY1t1', 'Date': 'Mon, 02 Dec 2024 07:58:55 GMT', 'Content-Type': 'application/x-amz-json-1.1', 'Content-Length': '146', 'connection': 'keep-alive'} 
+ body={"FailedRecordCount":0,"Records":[{"SequenceNumber":"49656202370868236242293652104216827300353958865847451650","ShardId":"shardId-000000000000"}]} 
+ </msg>
+<msg time="2024-12-02T13:28:55.418925" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${host}</arg>
+<arg>headers=${headers}</arg>
+<arg>json=${payload}</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2024-12-02T13:28:54.198326" elapsed="1.220814"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:55.419952" level="INFO">${RESPONSE} = &lt;Response [200]&gt;</msg>
+<arg>${RESPONSE}</arg>
+<arg>${response}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.419558" elapsed="0.000442"/>
+</kw>
+<arg>${KINESIS_HOST}</arg>
+<arg>${LOG_UPLOAD_SIGNED_HEADERS}</arg>
+<arg>${LOG_UPLOAD_PAYLOAD}</arg>
+<status status="PASS" start="2024-12-02T13:28:54.197953" elapsed="1.222151"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:55.420998" level="INFO">${KINESIS_LOG_UPLOAD_RESPONSE} = &lt;Response [200]&gt;</msg>
+<arg>${KINESIS_LOG_UPLOAD_RESPONSE}</arg>
+<arg>${RESPONSE}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.420645" elapsed="0.000418"/>
+</kw>
+<kw name="Verify the response code" owner="keywords">
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2024-12-02T13:28:55.422365" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>${expected_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.421669" elapsed="0.000763"/>
+</kw>
+<arg>${KINESIS_LOG_UPLOAD_RESPONSE}</arg>
+<arg>200</arg>
+<status status="PASS" start="2024-12-02T13:28:55.421343" elapsed="0.001157"/>
+</kw>
+<kw name="Verify log upload to kinesis response" owner="keywords">
+<kw name="Convert String To Json" owner="JSONLibrary">
+<msg time="2024-12-02T13:28:55.423679" level="INFO">${response_json} = {'FailedRecordCount': 0, 'Records': [{'SequenceNumber': '49656202370868236242293652104216827300353958865847451650', 'ShardId': 'shardId-000000000000'}]}</msg>
+<var>${response_json}</var>
+<arg>${response.text}</arg>
+<doc>Convert String to JSON object</doc>
+<status status="PASS" start="2024-12-02T13:28:55.422985" elapsed="0.000720"/>
+</kw>
+<kw name="Convert To Dictionary" owner="Collections">
+<msg time="2024-12-02T13:28:55.423940" level="INFO">${response_dictionary} = {'FailedRecordCount': 0, 'Records': [{'SequenceNumber': '49656202370868236242293652104216827300353958865847451650', 'ShardId': 'shardId-000000000000'}]}</msg>
+<var>${response_dictionary}</var>
+<arg>${response_json}</arg>
+<doc>Converts the given ``item`` to a Python ``dict`` type.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.423811" elapsed="0.000150"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${response_dictionary}</arg>
+<arg>FailedRecordCount</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.424063" elapsed="0.000146"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<msg time="2024-12-02T13:28:55.424748" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response_dictionary['FailedRecordCount']}</arg>
+<arg>0</arg>
+<arg>"'FailedRecordCount' should be 0"</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.424290" elapsed="0.000512"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${response_dictionary}</arg>
+<arg>Records</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.424884" elapsed="0.000098"/>
+</kw>
+<kw name="Get From List" owner="Collections">
+<msg time="2024-12-02T13:28:55.425490" level="INFO">${record} = {'SequenceNumber': '49656202370868236242293652104216827300353958865847451650', 'ShardId': 'shardId-000000000000'}</msg>
+<var>${record}</var>
+<arg>${response_dictionary['Records']}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.425062" elapsed="0.000446"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${record}</arg>
+<arg>SequenceNumber</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.425591" elapsed="0.000096"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:55.426182" level="INFO">${sequence_number} = 49656202370868236242293652104216827300353958865847451650</msg>
+<var>${sequence_number}</var>
+<arg>${record['SequenceNumber']}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.425771" elapsed="0.000428"/>
+</kw>
+<kw name="Should Match Regexp" owner="BuiltIn">
+<arg>${sequence_number}</arg>
+<arg>^\\d{56}$</arg>
+<arg>"SequenceNumber should be a 56-digit number"</arg>
+<doc>Fails if ``string`` does not match ``pattern`` as a regular expression.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.426284" elapsed="0.000247"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:55.426829" level="INFO">${SEQUENCE_NUMBER} = 49656202370868236242293652104216827300353958865847451650</msg>
+<arg>${SEQUENCE_NUMBER}</arg>
+<arg>${sequence_number}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.426624" elapsed="0.000259"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${record}</arg>
+<arg>ShardId</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.426993" elapsed="0.000134"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:55.427822" level="INFO">${shard_id} = shardId-000000000000</msg>
+<var>${shard_id}</var>
+<arg>${record['ShardId']}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.427221" elapsed="0.000628"/>
+</kw>
+<kw name="Should Match Regexp" owner="BuiltIn">
+<arg>${shard_id}</arg>
+<arg>^shardId-\\d{12}$</arg>
+<arg>"ShardId should match format 'shardId-&lt;12 digits&gt;'"</arg>
+<doc>Fails if ``string`` does not match ``pattern`` as a regular expression.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.427962" elapsed="0.000276"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2024-12-02T13:28:55.428497" level="INFO">${SHARD_ID} = shardId-000000000000</msg>
+<arg>${SHARD_ID}</arg>
+<arg>${shard_id}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2024-12-02T13:28:55.428350" elapsed="0.000181"/>
+</kw>
+<arg>${KINESIS_LOG_UPLOAD_RESPONSE}</arg>
+<status status="PASS" start="2024-12-02T13:28:55.422731" elapsed="0.005846"/>
+</kw>
+<doc>Verifies that the log is successfully uploaded to Kinesis</doc>
+<tag>API</tag>
+<tag>Regression</tag>
+<tag>Sanity</tag>
+<status status="PASS" start="2024-12-02T13:28:54.194976" elapsed="1.233718"/>
+</test>
+<status status="PASS" start="2024-12-02T13:28:52.815881" elapsed="2.613440"/>
+</suite>
+<statistics>
+<total>
+<stat pass="3" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="3" fail="0" skip="0">API</stat>
+<stat pass="3" fail="0" skip="0">Regression</stat>
+<stat pass="3" fail="0" skip="0">Sanity</stat>
+</tag>
+<suite>
+<stat pass="3" fail="0" skip="0" id="s1" name="bgAPITest">bgAPITest</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

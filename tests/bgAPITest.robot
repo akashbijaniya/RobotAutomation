@@ -3,75 +3,42 @@ Library           JSONLibrary
 Library           Collections
 Library           RequestsLibrary
 Library           String
+Library           OperatingSystem
 Variables         ../config/Config.py  # Load environment, API headers, and payload configurations
-
-*** Variables ***
-${ENV}            qac1  # Default environment, can be overridden at runtime
+Resource          ../resources/keywords.robot
 
 *** Test Cases ***
-Test Kinesis Shard Key API
-    ${response}=  Send API Request    kinesis_shard_key    ${ENV}
-    Verify PartitionKey    ${response}
-    Verify StreamName    ${response}
 
-Test Signed Kinesis Post API
-    ${response}=  Send API Request    signed_kinesis_post    ${ENV}
-    Log    ${response.status_code}
-    Log    ${response.text}
-
-*** Keywords ***
-Send API Request
-    [Arguments]    ${api_name}    ${env}
-    ${env_data}=      Get Environment Configuration    ${env}
-    ${headers}=       Get API Headers    ${api_name}    ${env}
-    ${payload}=       Get API Payload    ${api_name}    ${env}
-    ${url}=           Get From Dictionary    ${env_data}    url
-
-    ${response}=      POST    ${url}/api/${api_name}    headers=${headers}    json=${payload}
-    RETURN          ${response}
-
-Verify PartitionKey
-    [Arguments]    ${response}
-    ${response_json}=    Convert String To Json    ${response.text}
-    ${response_dictionary}=    Convert To Dictionary    ${response_json}
-
-    ${partitionKey}=    Get From Dictionary    ${response_dictionary}    PartitionKey
-    Should Be Empty    ${partitionKey}    PartitionKey is missing or empty
-    Should Match Regexp    ${partitionKey}    ^[A-Za-z0-9]{36}$    PartitionKey is not alphanumeric or does not have a length of 32
-
-Verify StreamName
-    [Arguments]    ${response}
-    ${response_json}=    Convert String To Json    ${response.text}
-    ${response_dictionary}=    Convert To Dictionary    ${response_json}
-
-    ${streamName}=    Get From Dictionary    ${response_dictionary}    StreamName
-    Should Be String    ${streamName}    StreamName is not a string
-    Should Start With    ${streamName}    sase-raw-logs-    StreamName does not start with 'sase-raw-logs-'
-
-    ${env_data}=      Get Environment Configuration    ${env}
-    ${environmentSuffix}=    Get From Dictionary    ${env_data}    environmentSuffix
-    Should End With    ${streamName}    ${environmentSuffix}    StreamName does not end with environment suffix ${environmentSuffix}
-
-Get Environment Configuration
-    [Arguments]    ${env}
-    ${env_data}=     Get From Dictionary    ${environments}    ${env}
-    Run Keyword If    ${env_data} is None    Fail    Invalid environment: ${env}
-    RETURN         ${env_data}
-
-Get API Headers
-    [Arguments]    ${api_name}    ${env}
-    ${headers_data}=     Get From Dictionary    ${api_headers}    ${api_name}
-    Run Keyword If    ${headers_data} is None    Fail    Invalid API name: ${api_name}
-
-    ${headers}=       Get From Dictionary    ${headers_data}    ${env}
-    Run Keyword If    ${headers} is None    Fail    No headers defined for API: ${api_name} in environment: ${env}
-    RETURN         ${headers}
-
-Get API Payload
-    [Arguments]    ${api_name}    ${env}
-    ${payload_data}=     Get From Dictionary    ${api_payloads}    ${api_name}
-    Run Keyword If    ${payload_data} is None    Fail    Invalid API name: ${api_name}
-
-    ${payload}=       Get From Dictionary    ${payload_data}    ${env}
-    Run Keyword If    ${payload} is None    Fail    No payload defined for API: ${api_name} in environment: ${env}
-    RETURN         ${payload}
+Verify that a POST API call to "/api/kinesis_shard_key/" endpoint returns a valid PartitionKey and StreamName
+    [Documentation]    Verifies that the kinesis_shard_key API returns a valid PartitionKey and StreamName
+    [Tags]    Sanity    Regression    API
+    Create API session                                       mysession                        kinesis_shard_key     ${ENV}
+    Send a Post request on the session                       mysession                        kinesis_shard_key     ${ENV}
+    Set Suite Variable                                       ${KINESIS_SHARD_KEY_RESPONSE}    ${RESPONSE}
+    Verify the response code                                 ${KINESIS_SHARD_KEY_RESPONSE}    200
+    Verify PartitionKey from JSON response and extract it    ${KINESIS_SHARD_KEY_RESPONSE}
+    Verify StreamName from JSON response and extract it      ${KINESIS_SHARD_KEY_RESPONSE}
+    # Create base64 encoded data for the log upload payload
+    # Create log upload payload using the required parameters  ${PARTITION_KEY}                 ${STREAM_NAME}        ${DATA}
+    # Generate SHA-256 Hash from the payload                   ${LOG_UPLOAD_PAYLOAD}
+    # Set Suite Variable                                       ${LOG_UPLOAD_PAYLOAD_HASH}       ${PAYLOAD_HASH}
+    
+Verify that a POST API call to "/api/signed_kinesis_post/" endpoint returns valid authorization headers
+    [Documentation]    Verifies that the signed_kinesis_post API returns valid authorization headers
+    [Tags]    Sanity    Regression    API
+    Create base64 encoded data for the log upload payload
+    Create log upload payload using the required parameters  ${PARTITION_KEY}                             ${STREAM_NAME}        ${DATA}
+    Generate SHA-256 Hash from the payload                   ${LOG_UPLOAD_PAYLOAD}
+    Set Suite Variable                                       ${LOG_UPLOAD_PAYLOAD_HASH}                   ${PAYLOAD_HASH}
+    Send a Post request on the session                       mysession                                    signed_kinesis_post   ${ENV}    ${PAYLOAD_HASH}
+    Set Suite Variable                                       ${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}   ${RESPONSE.text}
+    Verify the response code                                 ${RESPONSE}                                  200
+    
+Verify that the log is successfully uploaded to Kinesis
+    [Documentation]    Verifies that the log is successfully uploaded to Kinesis
+    [Tags]    Sanity    Regression    API
+    Extract signed headers                 ${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}
+    Send a Post request                    ${KINESIS_HOST}                              ${LOG_UPLOAD_SIGNED_HEADERS}    ${LOG_UPLOAD_PAYLOAD}
+    Set Suite Variable                     ${KINESIS_LOG_UPLOAD_RESPONSE}               ${RESPONSE}
+    Verify the response code               ${KINESIS_LOG_UPLOAD_RESPONSE}               200
+    Verify log upload to kinesis response  ${KINESIS_LOG_UPLOAD_RESPONSE}
