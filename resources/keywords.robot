@@ -3,11 +3,12 @@ Library           JSONLibrary
 Library           Collections
 Library           RequestsLibrary
 Library           String
+Library           SSHLibrary
 Variables         ../config/Config.py  # Load environment, API headers, and payload configurations
 
 
 *** Variables ***
-${ENV}            qac1  # Default environment, can be overridden at runtime
+${ENV}             # Default environment, can be overridden at runtime
 ${PARTITION_KEY}        # Stores the partition key from the kinesis_shard_key API
 ${STREAM_NAME}          # Stores the stream name from the kinesis_shard_key API
 ${DATA}                 # Stores dynamically generated base64 encoded string
@@ -31,6 +32,24 @@ ${KINESIS_LOG_UPLOAD_RESPONSE}    # Store the response from the kinesis_file_upl
 # ${KINESIS_SHARD_KEY_RESPONSE_STRUCTURE}    {"PartitionKey":"","StreamName":"","status":0}
 &{KINESIS_SHARD_KEY_RESPONSE_STRUCTURE}    PartitionKey=    StreamName=    status=
 
+${PEM}             C:\\Suraj\\new_f\\RobotAutomation\\config\\dev4.pem  # Define the SSH PEM file
+${CONTROL_PLANE_DOWN_COMMAND}    sudo /opt/bg/frontend/bin/frontend.sh offline    # Define the command to take the Control offline
+${CONTROL_PLANE_UP_COMMAND}    sudo /opt/bg/frontend/bin/frontend.sh online      # Define the command to bring the Control onlinez
+
+${SWG_LOGGING_DOWN_COMMAND}    docker stop swg-logging                 # Define the command to take the SWG logging down
+${SWG_LOGGING_UP_COMMAND}    docker start swg-logging                 # Define the command to bring the SWG logging up
+
+${CPU_EXHAUSTION_COMMAND}    stress --cpu 4 --timeout 60               # Define the command to exhaust the CPU
+${RULE_CLEANED_UP_COMMAND}    sudo tc qdisc del dev ens5 root          # Define the command to clean up the network rules
+
+${MEMORY_EXHAUSTION_COMMAND}    stress-ng --vm 2 --vm-bytes 80% --timeout 60s        # Define the command to exhaust the memory
+
+${NETWORK_LATENCY_COMMAND}    sudo tc qdisc add dev ens5 root netem delay 800ms      # Define the command to add network latency    
+
+${PACKET_LOSS_COMMAND}    sudo tc qdisc add dev ens5 root netem loss 40%              # Define the command to add packet loss
+
+${FAILURE_OCCURRED}
+
 *** Keywords ***
 
 Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName
@@ -41,6 +60,7 @@ Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamN
     Verify the response code                                 ${KINESIS_SHARD_KEY_RESPONSE}    ${status_code}
     Verify PartitionKey from JSON response and extract it    ${KINESIS_SHARD_KEY_RESPONSE}
     Verify StreamName from JSON response and extract it      ${KINESIS_SHARD_KEY_RESPONSE}
+    
 
 Send a Post request to the Signed Kinesis Post API to get the signed headers
     [Arguments]    ${alias}    ${api_name}    ${env}    ${payload_hash}    ${status_code}
@@ -211,3 +231,30 @@ Get API payload
     ${payload}=       Get From Dictionary    ${payload_data}    ${env}
     Run Keyword If    ${payload} is None    Fail    No payload defined for API: ${api_name} in environment: ${env}
     RETURN         ${payload}
+
+Open SSH Connection
+    [Arguments]     ${env}    ${host_name}   ${user}    ${port}     ${PEM}
+    ${env_data}=       Get environment configuration    ${env}
+    ${ssh_host}=       Get From Dictionary    ${env_data}    ${host_name}
+    ${ssh_user}=       Get From Dictionary    ${env_data}    ${user}
+    ${ssh_port}=       Get From Dictionary    ${env_data}    ${port}
+    Open Connection    ${ssh_host}    ${ssh_port}
+    Login With Public Key    ${ssh_user}    ${PEM}    #${identity_file}
+    Log    SSH connection established with ${ssh_host}
+
+Run Command
+    [Arguments]    ${command}
+    # Execute the shutdown command on the remote machine
+    ${output}=    Execute Command    ${command}
+    Log   command executed. Output: ${output}
+
+Make node DOWN
+    [Arguments]    ${env}    ${host_name}   ${user}    ${port}     ${PEM}    ${command}
+    Open SSH Connection   ${env}    ${host_name}   ${user}    ${port}     ${PEM}
+    Run Command    ${command}
+
+Make node UP
+    [Arguments]    ${env}    ${host_name}   ${user}    ${port}     ${PEM}    ${command}
+    Open SSH Connection   ${env}    ${host_name}   ${user}    ${port}     ${PEM}
+    Run Command    ${command}
+

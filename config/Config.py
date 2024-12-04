@@ -2,10 +2,19 @@ environments = {
     "qac1": {
         "url": "https://portal.bgcls1.com",
         "environmentSuffix": "qac1"
+        # "Default_User":"ubuntu1",
+        # "Default_Port":"21",
+        # "Control_Plane":"qac1-bgapi1-b1-usw2a.bgcloud.dev"    
     },
     "dev4": {
         "url": "https://portal.dev4.fp1.dev",
-        "environmentSuffix": "dev4"
+        "environmentSuffix": "dev4",
+        "Default_User":"ubuntu",
+        "Default_Port":"22",
+        "Control_Plane":"dev4-bgapi1-b1-usw2a.bgcloud.dev",
+        "SWG_LOGGING_HOST1":"dev4-sase1-b1-usw2a.bgcloud.dev",              # Define the SSH host for the SWG logging
+        "SWG_LOGGING_HOST2":"dev4-sase2-b1-usw2b.bgcloud.dev",
+        "SWG_LOGGING_HOST3":"dev4-sase3-b1-usw2c.bgcloud.dev"
     }
 }
 
