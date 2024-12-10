@@ -12,7 +12,7 @@ Verify that the agent is able to get the required information and upload logs to
     [Documentation]    This test case verifies that the shard key api returns valid partition key and stream name, signed kinesis post api returns valid signed headers and log upload api successfully uploads logs to kinesis.
     [Tags]    Sanity    Regression    API
     Create API session                                                                   mysession        kinesis_shard_key             ${ENV}
-    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession        kinesis_shard_key             ${ENV}                 ${RESPONSE}      200
+    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession        kinesis_shard_key             ${ENV}                 200
     Send a Post request to the Signed Kinesis Post API to get the signed headers         mysession        signed_kinesis_post           ${ENV}                 ${PAYLOAD_HASH}  200
     Send a Post request to the Kinesis Log Upload API to verify the log upload           ${KINESIS_HOST}  ${LOG_UPLOAD_SIGNED_HEADERS}  ${LOG_UPLOAD_PAYLOAD}  200
     
@@ -25,7 +25,7 @@ Verify that the agent is able to get the required information and upload logs to
     Run Command                                                                          ${CONTROL_PLANE_DOWN_COMMAND}
     Sleep    10 seconds
     Create API session                                                                   mysession                        kinesis_shard_key             ${ENV}    
-    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                        kinesis_shard_key             ${ENV}                 ${RESPONSE}      200
+    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                        kinesis_shard_key             ${ENV}                 200
     Send a Post request to the Signed Kinesis Post API to get the signed headers         mysession                        signed_kinesis_post           ${ENV}                 ${PAYLOAD_HASH}  200
     Send a Post request to the Kinesis Log Upload API to verify the log upload           ${KINESIS_HOST}                  ${LOG_UPLOAD_SIGNED_HEADERS}  ${LOG_UPLOAD_PAYLOAD}  200
     
@@ -39,7 +39,7 @@ Verify that the agent is able to get the required information and upload logs to
     Open SSH Connection                                                                  ${ENV}                           Control_Plane                 Default_User           Default_Port     ${PEM} 
     Run Command                                                                          ${CONTROL_PLANE_DOWN_COMMAND}
     Sleep    10 seconds
-    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                        kinesis_shard_key             ${ENV}                 ${RESPONSE}      200
+    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                        kinesis_shard_key             ${ENV}                 200
     Send a Post request to the Signed Kinesis Post API to get the signed headers         mysession                        signed_kinesis_post           ${ENV}                 ${PAYLOAD_HASH}  200
     Send a Post request to the Kinesis Log Upload API to verify the log upload           ${KINESIS_HOST}                  ${LOG_UPLOAD_SIGNED_HEADERS}  ${LOG_UPLOAD_PAYLOAD}  200 
     
@@ -52,7 +52,7 @@ Verify that the agent is able to get the required information and upload logs to
     Create API session                                                                   mysession                    kinesis_shard_key             ${ENV} 
     Open SSH Connection                                                                  ${ENV}                       SWG_LOGGING_HOST3             Default_User           Default_Port     ${PEM}
     Run Command                                                                          ${NETWORK_LATENCY_COMMAND}
-    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                    kinesis_shard_key             ${ENV}                 ${RESPONSE}      200
+    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                    kinesis_shard_key             ${ENV}                 200
     Send a Post request to the Signed Kinesis Post API to get the signed headers         mysession                    signed_kinesis_post           ${ENV}                 ${PAYLOAD_HASH}  200
     Send a Post request to the Kinesis Log Upload API to verify the log upload           ${KINESIS_HOST}              ${LOG_UPLOAD_SIGNED_HEADERS}  ${LOG_UPLOAD_PAYLOAD}  200    
     
@@ -65,8 +65,6 @@ Verify that the agent is able to get the required information and upload logs to
     Create API session                                                                   mysession                kinesis_shard_key             ${ENV} 
     Open SSH Connection                                                                  ${ENV}                   SWG_LOGGING_HOST3             Default_User           Default_Port     ${PEM}
     Run Command                                                                          ${PACKET_LOSS_COMMAND}
-    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                kinesis_shard_key             ${ENV}                 ${RESPONSE}      200
+    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                kinesis_shard_key             ${ENV}                 200
     Send a Post request to the Signed Kinesis Post API to get the signed headers         mysession                signed_kinesis_post           ${ENV}                 ${PAYLOAD_HASH}  200
     Send a Post request to the Kinesis Log Upload API to verify the log upload           ${KINESIS_HOST}          ${LOG_UPLOAD_SIGNED_HEADERS}  ${LOG_UPLOAD_PAYLOAD}  200    
-    
-
