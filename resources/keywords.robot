@@ -33,7 +33,7 @@ ${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}    # Store the response from the sign
 ${KINESIS_LOG_UPLOAD_RESPONSE}    # Store the response from the kinesis_file_upload API
 &{KINESIS_SHARD_KEY_RESPONSE_STRUCTURE}    PartitionKey=    StreamName=    status=
 
-${PEM}             C:\\Suraj\\new_f\\RobotAutomation\\config\\dev4.pem  # Define the SSH PEM file
+${DEV4_PEM}             ../config/dev4.pem  # Define the SSH PEM file
 ${CONTROL_PLANE_DOWN_COMMAND}    sudo /opt/bg/frontend/bin/frontend.sh offline    # Define the command to take the Control offline
 ${CONTROL_PLANE_UP_COMMAND}    sudo /opt/bg/frontend/bin/frontend.sh online      # Define the command to bring the Control onlinez
 
