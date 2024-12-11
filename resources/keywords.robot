@@ -33,7 +33,7 @@ ${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}    # Store the response from the sign
 ${KINESIS_LOG_UPLOAD_RESPONSE}    # Store the response from the kinesis_file_upload API
 &{KINESIS_SHARD_KEY_RESPONSE_STRUCTURE}    PartitionKey=    StreamName=    status=
 
-${DEV4.PEM}             ../../RobotAutomation/config/dev4.pem  # Define the SSH PEM file
+${PEM}             C:\\Suraj\\new_f\\RobotAutomation\\config\\dev4.pem  # Define the SSH PEM file
 ${CONTROL_PLANE_DOWN_COMMAND}    sudo /opt/bg/frontend/bin/frontend.sh offline    # Define the command to take the Control offline
 ${CONTROL_PLANE_UP_COMMAND}    sudo /opt/bg/frontend/bin/frontend.sh online      # Define the command to bring the Control onlinez
 
@@ -61,7 +61,7 @@ ${REDIS_CONNECTION_COMMAND}    redis-cli -h dev4-redis-swglogger.bgcloud.dev -p 
 
 *** Keywords ***
 Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName
-    [Arguments]    ${alias}    ${api_name}    ${env}   ${response}    ${status_code}
+    [Arguments]    ${alias}    ${api_name}    ${env}    ${status_code}
 
     Send a Post request on the session                       mysession                        kinesis_shard_key     ${ENV}
     Set Suite Variable                                       ${KINESIS_SHARD_KEY_RESPONSE}    ${RESPONSE}
@@ -274,7 +274,7 @@ Verify Control Plane is Bypassed
     [Arguments]    ${env}    ${host_name}   ${user}    ${port}     ${PEM}    ${command}    ${control_plane_host_name}     ${swg_logging_host_name} 
     Open SSH Connection   ${env}    ${host_name}   ${user}    ${port}     ${PEM}
     ${stdout}=    Write    ${command}
-    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                kinesis_shard_key             ${ENV}                 ${RESPONSE}      200
+    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                kinesis_shard_key             ${ENV}                 200
     Send a Post request to the Signed Kinesis Post API to get the signed headers         mysession                signed_kinesis_post           ${ENV}                 ${PAYLOAD_HASH}  200
     ${Logs_Output}=    Read    delay=10s
     log    ${Logs_Output}
