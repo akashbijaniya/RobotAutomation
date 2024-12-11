@@ -100,9 +100,6 @@ Verify that the agent is able to get the required information and upload logs to
     [Tags]    Sanity    Regression    API    SSE-
     
     Create API session                                                                 mysession                         kinesis_shard_key         ${ENV} 
-    Verify Control Plane is Bypassed                                                 ${ENV}                            HA_PROXY_HOST             Default_User           Default_Port     ${DEV4.PEM}    ${HA_PROXY_LOG_COMMAND}    CONTROL_PLANE_HOST          SWG_LOGGING_HOST3
+    Verify Control Plane is Bypassed                                                   ${ENV}                            HA_PROXY_HOST             Default_User           Default_Port     ${DEV4.PEM}    ${HA_PROXY_LOG_COMMAND}    CONTROL_PLANE_HOST          SWG_LOGGING_HOST3
 
-    # Open SSH Connection                                                              ${ENV}                            JENKINS_HOST              Default_User           Default_Port     ${DEV4.PEM}
-    # Run Command                                                                      ${JENKINS_COMMAND}
-    # Run Command                                                                      ${HA_PROXY_LOG_COMMAND}
-    # Verify Control Plane is Bypassedd                                                  ${ENV}                            JENKINS_HOST              Default_User           Default_Port     ${DEV4.PEM}    ${IDENTITY_FILE}    ${JENKINS_COMMAND}         ${HA_PROXY_LOG_COMMAND1}    CONTROL_PLANE_HOST    SWG_LOGGING_HOST3
+    
