@@ -6,6 +6,7 @@ Library           String
 Library           SSHLibrary
 Library           Process
 Variables         ../config/Config.py  # Load environment, API headers, and payload configurations
+         
 
 
 *** Variables ***
@@ -50,12 +51,12 @@ ${STRESS_INSTALL_COMMAND}    sudo apt-get install stress
 ${STRESS-NG_INSTALL_COMMAND}    sudo apt-get install stress-ng
 
 ${HA_PROXY_LOG_COMMAND}    sudo tail -f /opt/bg/deploy/log/haproxy.log    | grep  -e "signed_kinesis_post" -e "kinesis_shard_key"
-#${HA_PROXY_LOG_COMMAND1}    sudo -E sh -c "tail -f /opt/bg/deploy/log/haproxy.log"
+# ${HA_PROXY_LOG_COMMAND1}    sudo  tail  -f  /opt/bg/deploy/log/haproxy.log  arguments=|  grep  -e "signed_kinesis_post"  -e "kinesis_shard_key"
 
-#${JENKINS_COMMAND}     	sudo su jenkins ssh qac1-haproxy1.us-east-2 
+# ${JENKINS_COMMAND}     	sudo su jenkins
 ${first_part}    # Store the first part of the host name
 
-#${IDENTITY_FILE}    ../../RobotAutomation/config/ssh_congig.ini  # Define the SSH PEM file
+${REDIS_CONNECTION_COMMAND}    redis-cli -h dev4-redis-swglogger.bgcloud.dev -p 6379
 
 
 *** Keywords ***
@@ -252,19 +253,8 @@ Open SSH Connection
 
 Run Command
     [Arguments]    ${command}
-    # Execute the shutdown command on the remote machine
     ${output}=    Execute Command    ${command}
     Log   command executed. Output: ${output}
-
-# Make node DOWN
-#     [Arguments]    ${env}    ${host_name}   ${user}    ${port}     ${PEM}    ${command}
-#     Open SSH Connection   ${env}    ${host_name}   ${user}    ${port}     ${PEM}
-#     Run Command    ${command}
-
-# Make node UP
-#     [Arguments]    ${env}    ${host_name}   ${user}    ${port}     ${PEM}    ${command}
-#     Open SSH Connection   ${env}    ${host_name}   ${user}    ${port}     ${PEM}
-#     Run Command    ${command}  
     
 Fetching host from environment
     [Arguments]    ${env}    ${host_name}
@@ -297,21 +287,6 @@ Verify Control Plane is Bypassed
     Split String by Period    ${env}    ${swg}    
     Should Contain    ${Logs_Output}      ${first_part}
 
-# Verify Control Plane is Bypassedd
-#     [Arguments]    ${env}    ${host_name}   ${user}    ${port}     ${PEM}    ${command}    ${command1}    ${control_plane_host_name}     ${swg_logging_host_name} 
-#     Open SSH Connection   ${env}    ${host_name}   ${user}    ${port}     ${PEM}    
-#     Execute Command    ${command}
-#     Execute Command    ${command1}
-#     Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                kinesis_shard_key             ${ENV}                 ${RESPONSE}      200
-#     Send a Post request to the Signed Kinesis Post API to get the signed headers         mysession                signed_kinesis_post           ${ENV}                 ${PAYLOAD_HASH}  200
-#     ${Logs_Output}=    Read    delay=10s
-#     log    ${Logs_Output}
+   
     
-#     ${control_plane}=    Fetching host from environment    ${env}    ${control_plane_host_name}
-#     Split String by Period    ${env}    ${control_plane}
-#     Should Not Contain    ${Logs_Output}      ${first_part}
-
-#     ${swg}=    Fetching host from environment    ${env}    ${swg_logging_host_name}
-#     Split String by Period    ${env}    ${swg}    
-#     Should Contain    ${Logs_Output}      ${first_part}
 
