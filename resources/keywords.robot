@@ -4,7 +4,9 @@ Library           Collections
 Library           RequestsLibrary
 Library           String
 Library           SSHLibrary
+Library           Process
 Variables         ../config/Config.py  # Load environment, API headers, and payload configurations
+         
 
 
 *** Variables ***
@@ -29,7 +31,6 @@ ${RESPONSE}    # Store the response from the API
 ${KINESIS_SHARD_KEY_RESPONSE}    # Store the response from the kinesis_shard_key API
 ${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}    # Store the response from the signed_kinesis_post API
 ${KINESIS_LOG_UPLOAD_RESPONSE}    # Store the response from the kinesis_file_upload API
-# ${KINESIS_SHARD_KEY_RESPONSE_STRUCTURE}    {"PartitionKey":"","StreamName":"","status":0}
 &{KINESIS_SHARD_KEY_RESPONSE_STRUCTURE}    PartitionKey=    StreamName=    status=
 
 ${PEM}             ../config/dev4.pem  # Define the SSH PEM file
@@ -43,15 +44,21 @@ ${CPU_EXHAUSTION_COMMAND}    stress --cpu 4 --timeout 60               # Define 
 ${RULE_CLEANED_UP_COMMAND}    sudo tc qdisc del dev ens5 root          # Define the command to clean up the network rules
 
 ${MEMORY_EXHAUSTION_COMMAND}    stress-ng --vm 2 --vm-bytes 80% --timeout 60s        # Define the command to exhaust the memory
-
 ${NETWORK_LATENCY_COMMAND}    sudo tc qdisc add dev ens5 root netem delay 800ms      # Define the command to add network latency    
+${PACKET_LOSS_COMMAND}    sudo tc qdisc add dev ens5 root netem loss 30%              # Define the command to add packet loss
 
-${PACKET_LOSS_COMMAND}    sudo tc qdisc add dev ens5 root netem loss 40%              # Define the command to add packet loss
+${STRESS_INSTALL_COMMAND}    sudo apt-get install stress
+${STRESS-NG_INSTALL_COMMAND}    sudo apt-get install stress-ng
 
-${FAILURE_OCCURRED}
+${HA_PROXY_LOG_COMMAND}    sudo tail -f /opt/bg/deploy/log/haproxy.log    | grep  -e "signed_kinesis_post" -e "kinesis_shard_key"
+
+${first_part}    # Store the first part of the host name
+
+${REDIS_HOST}    dev4-redis-swglogger.bgcloud.dev
+${REDIS_PORT}    6379
+
 
 *** Keywords ***
-
 Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName
     [Arguments]    ${alias}    ${api_name}    ${env}    ${status_code}
 
@@ -89,6 +96,7 @@ Create API session
     ${url}=           Get From Dictionary    ${env_data}    url
     Create Session    ${alias}    ${url}    headers=${headers}    verify=True
 
+   
 Send a Post request on the session
     [Arguments]    ${alias}    ${api_name}    ${env}    ${payload}=None
     ${env_data}=    Get environment configuration    ${env}
@@ -163,7 +171,7 @@ Verify PartitionKey from JSON response and extract it
     ${partitionKey}=    Get From Dictionary    ${response_dictionary}    PartitionKey
     Should Not Be Empty    ${partitionKey}    PartitionKey is missing or empty
     Should Match Regexp    ${partitionKey}    ^[A-Za-z0-9]{32}$    PartitionKey is not alphanumeric or does not have a length of 32
-    Set Suite Variable    ${PARTITION_KEY}    ${partitionkey}
+    Set Suite Variable     ${PARTITION_KEY}    ${partitionkey}
 
 Verify StreamName from JSON response and extract it
     [Arguments]    ${response}
@@ -199,7 +207,7 @@ Verify log upload to kinesis response
     Dictionary Should Contain Key    ${record}    SequenceNumber
     ${sequence_number}=    Set Variable    ${record['SequenceNumber']}
     Should Match Regexp    ${sequence_number}    ^\\d{56}$    "SequenceNumber should be a 56-digit number"
-    Set Suite Variable    ${SEQUENCE_NUMBER}    ${sequence_number}
+    Set Suite Variable     ${SEQUENCE_NUMBER}    ${sequence_number}
 
     # Verify 'ShardId'
     Dictionary Should Contain Key    ${record}    ShardId
@@ -233,28 +241,57 @@ Get API payload
     RETURN         ${payload}
 
 Open SSH Connection
-    [Arguments]     ${env}    ${host_name}   ${user}    ${port}     ${PEM}
+    [Arguments]     ${env}    ${host_name}   ${user}    ${port}     ${pem}    
     ${env_data}=       Get environment configuration    ${env}
     ${ssh_host}=       Get From Dictionary    ${env_data}    ${host_name}
     ${ssh_user}=       Get From Dictionary    ${env_data}    ${user}
     ${ssh_port}=       Get From Dictionary    ${env_data}    ${port}
+    ${ssh_pem}=        Get From Dictionary    ${env_data}    ${pem}
+    Log   ${ssh_pem}
     Open Connection    ${ssh_host}    ${ssh_port}
-    Login With Public Key    ${ssh_user}    ${PEM}    #${identity_file}
+    Login With Public Key    ${ssh_user}    ${ssh_pem}    
     Log    SSH connection established with ${ssh_host}
 
 Run Command
     [Arguments]    ${command}
-    # Execute the shutdown command on the remote machine
     ${output}=    Execute Command    ${command}
     Log   command executed. Output: ${output}
+    
+Fetching host from environment
+    [Arguments]    ${env}    ${host_name}
+    ${env_data}=       Get environment configuration    ${env}
+    ${host}=           Get From Dictionary    ${env_data}    ${host_name}
+    RETURN             ${host}
+    
+Split String by Period
+    [Arguments]    ${env}    ${host_name}    
+    ${env_data}=       Get environment configuration    ${env}
+    ${split_list}=    Split String    ${host_name}    .
+    ${first_part}=    Get From List    ${split_list}    0
+    Log    ${first_part}
+    Set Global Variable       ${first_part}
 
-Make node DOWN
-    [Arguments]    ${env}    ${host_name}   ${user}    ${port}     ${PEM}    ${command}
+Verify Control Plane is Bypassed
+    [Arguments]    ${env}    ${host_name}   ${user}    ${port}     ${PEM}    ${command}    ${control_plane_host_name}     ${swg_logging_host_name} 
     Open SSH Connection   ${env}    ${host_name}   ${user}    ${port}     ${PEM}
-    Run Command    ${command}
+    ${stdout}=    Write    ${command}
+    Send a Post request to the Kinesis Shard Key API to get PartitionKey and StreamName  mysession                kinesis_shard_key             ${ENV}                 200
+    Send a Post request to the Signed Kinesis Post API to get the signed headers         mysession                signed_kinesis_post           ${ENV}                 ${PAYLOAD_HASH}  200
+    ${Logs_Output}=    Read    delay=10s
+    log    ${Logs_Output}
+    
+    ${control_plane}=    Fetching host from environment    ${env}    ${control_plane_host_name}
+    Split String by Period    ${env}    ${control_plane}
+    Should Not Contain    ${Logs_Output}      ${first_part}
 
-Make node UP
-    [Arguments]    ${env}    ${host_name}   ${user}    ${port}     ${PEM}    ${command}
-    Open SSH Connection   ${env}    ${host_name}   ${user}    ${port}     ${PEM}
-    Run Command    ${command}
+    ${swg}=    Fetching host from environment    ${env}    ${swg_logging_host_name}
+    Split String by Period    ${env}    ${swg}    
+    Should Contain    ${Logs_Output}      ${first_part}
+
+
+
+
+
+   
+    
 
