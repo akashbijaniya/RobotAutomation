@@ -4,10 +4,9 @@ environments = {
         "environmentSuffix": "qac1",
         "Default_User":"ubuntu",
         "Default_Port":"22",
-        "CONTROL_PLANE_HOST":"qac1-bgapi1-b1-usw2a.bgcloud.dev",
-        "HA_PROXY_HOST":"qac1-haproxy1-usw2a.bgcloud.dev", 
-        "JENKINS_HOST":"10.73.10.201",
-
+        "CONTROL_PLANE_HOST":"qac1-bgapi2-b1-us-east-2b.bgcorp.com",
+        "HA_PROXY_HOST":"qac1-haproxy1.us-east-2.bgcorp.com", 
+        "PEM_FILE_LOCATION":"../config/qac.pem"
     },
     "dev4": {
         "url": "https://portal.dev4.fp1.dev",
@@ -19,6 +18,7 @@ environments = {
         "SWG_LOGGING_HOST2":"dev4-sase2-b1-usw2b.bgcloud.dev",
         "SWG_LOGGING_HOST3":"dev4-sase3-b1-usw2c.bgcloud.dev",
         "HA_PROXY_HOST":"dev4-haproxy1-usw2a.bgcloud.dev",
+        "PEM_FILE_LOCATION":"../config/dev4.pem"
     }
 }
 
@@ -43,7 +43,7 @@ api_headers = {
         },
         "dev4": {
             "X-Bitglass-Machine-GUID": "8384ACD4-E326-4D6B-9650-36454B1F2ED6",
-            #"cid": "0_TxbPtvZGUnzAkFHv27-_oVAs4Z9aI7nPVQ==",
+            "cid": "0_TxbPtvZGUnzAkFHv27-_oVAs4Z9aI7nPVQ==",
             "Content-Type": "application/json"
         }
     },

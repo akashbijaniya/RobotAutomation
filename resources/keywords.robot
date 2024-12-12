@@ -33,7 +33,7 @@ ${LOG_UPLOAD_SIGNED_KINESIS_POST_RESPONSE}    # Store the response from the sign
 ${KINESIS_LOG_UPLOAD_RESPONSE}    # Store the response from the kinesis_file_upload API
 &{KINESIS_SHARD_KEY_RESPONSE_STRUCTURE}    PartitionKey=    StreamName=    status=
 
-${DEV4_PEM}             ../config/dev4.pem  # Define the SSH PEM file
+${PEM}             ../config/dev4.pem  # Define the SSH PEM file
 ${CONTROL_PLANE_DOWN_COMMAND}    sudo /opt/bg/frontend/bin/frontend.sh offline    # Define the command to take the Control offline
 ${CONTROL_PLANE_UP_COMMAND}    sudo /opt/bg/frontend/bin/frontend.sh online      # Define the command to bring the Control onlinez
 
@@ -51,12 +51,11 @@ ${STRESS_INSTALL_COMMAND}    sudo apt-get install stress
 ${STRESS-NG_INSTALL_COMMAND}    sudo apt-get install stress-ng
 
 ${HA_PROXY_LOG_COMMAND}    sudo tail -f /opt/bg/deploy/log/haproxy.log    | grep  -e "signed_kinesis_post" -e "kinesis_shard_key"
-# ${HA_PROXY_LOG_COMMAND1}    sudo  tail  -f  /opt/bg/deploy/log/haproxy.log  arguments=|  grep  -e "signed_kinesis_post"  -e "kinesis_shard_key"
 
-# ${JENKINS_COMMAND}     	sudo su jenkins
 ${first_part}    # Store the first part of the host name
 
-${REDIS_CONNECTION_COMMAND}    redis-cli -h dev4-redis-swglogger.bgcloud.dev -p 6379
+${REDIS_HOST}    dev4-redis-swglogger.bgcloud.dev
+${REDIS_PORT}    6379
 
 
 *** Keywords ***
@@ -242,13 +241,15 @@ Get API payload
     RETURN         ${payload}
 
 Open SSH Connection
-    [Arguments]     ${env}    ${host_name}   ${user}    ${port}     ${DEV4.PEM}    
+    [Arguments]     ${env}    ${host_name}   ${user}    ${port}     ${pem}    
     ${env_data}=       Get environment configuration    ${env}
     ${ssh_host}=       Get From Dictionary    ${env_data}    ${host_name}
     ${ssh_user}=       Get From Dictionary    ${env_data}    ${user}
     ${ssh_port}=       Get From Dictionary    ${env_data}    ${port}
+    ${ssh_pem}=        Get From Dictionary    ${env_data}    ${pem}
+    Log   ${ssh_pem}
     Open Connection    ${ssh_host}    ${ssh_port}
-    Login With Public Key    ${ssh_user}    ${DEV4.PEM}    
+    Login With Public Key    ${ssh_user}    ${ssh_pem}    
     Log    SSH connection established with ${ssh_host}
 
 Run Command
@@ -286,6 +287,10 @@ Verify Control Plane is Bypassed
     ${swg}=    Fetching host from environment    ${env}    ${swg_logging_host_name}
     Split String by Period    ${env}    ${swg}    
     Should Contain    ${Logs_Output}      ${first_part}
+
+
+
+
 
    
     
